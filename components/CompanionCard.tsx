@@ -4,7 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-interface CompnaionProps {
+interface CompanioProps {
     id: string,
     name: string
     topic: string
@@ -13,7 +13,7 @@ interface CompnaionProps {
     duration: number
 }
 
-const CompanionCard = ({ id, name, topic, subject, color, duration }: CompnaionProps) => {
+const CompanionCard = ({ id, name, topic, subject, color, duration }: CompanioProps) => {
     return (
         <article className='companion-card' style={{ backgroundColor: color }}>
             <div className='flex justify-between items-center'>
