@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque,Inter } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const bricolage = Inter({
   variable: "--font-bricolage",
@@ -18,7 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${bricolage.variable} antialiased`} >{children}</body>
+      <body className={`${bricolage.variable} antialiased`} >
+        <Navbar/>
+        {children}
+        </body>
     </html>
   );
 }
