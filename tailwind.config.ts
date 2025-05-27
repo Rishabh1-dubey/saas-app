@@ -55,7 +55,9 @@ export default {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
-  		}
+  		},
+        destructive: "hsl(var(--destructive))",
+      
   	}
   },
   plugins: [require("tailwindcss-animate")],
