@@ -1,11 +1,11 @@
-
+"use client"
 import React from 'react'
 import Image from 'next/image'
 import NavbarCard from './NavbarCard'
 import Link from 'next/link'
 import { SignInButton,SignIn,SignedOut,UserButton, SignUpButton, SignedIn } from '@clerk/nextjs'
 import { Button } from './ui/button'
-import { User } from 'lucide-react'
+
 
 const Navbar = () => {
   return (
@@ -26,7 +26,7 @@ const Navbar = () => {
         </div>
       </SignedOut>
       <SignedIn>
-        <UserButton/>
+        <UserButton afterSignOutUrl="/sign-in"/>
       </SignedIn>
       </div>
     </nav>

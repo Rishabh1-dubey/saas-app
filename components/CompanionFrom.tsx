@@ -24,6 +24,10 @@ import {
 } from "@/components/ui/select";
 import { subjects } from "@/constants";
 import { Textarea } from "./ui/textarea";
+import { createCompanion } from "@/lib/action/companion.actions";
+import { useRouter } from "next/navigation";
+
+
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "name must be at least 2 characters." }),
@@ -37,6 +41,9 @@ const formSchema = z.object({
 });
 
 const CompanionFrom = () => {
+  const router = useRouter()
+
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,15 +55,24 @@ const CompanionFrom = () => {
     },
   });
 
+
+
   // 2. Define a submit handler.
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    const companion = await createCompanion(values);
+
+    if (companion) {
+      router.push(`/companions/${companion.id}`)
+    } else {
+      console.log("Failed to redload the companion")
+      router.push('/')
+    }
   };
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <Form {...form} >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 ">
         <FormField
           control={form.control}
           name="name"
@@ -65,7 +81,7 @@ const CompanionFrom = () => {
               <FormLabel>Companion Name</FormLabel>
               <FormControl>
                 <Input
-                  className=" text-gray-500"
+                  className="input"
                   placeholder="Enter your companion name"
                   {...field}
                 />
@@ -133,55 +149,61 @@ const CompanionFrom = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Please Select Your voice</FormLabel>
+              <FormControl>
 
-              <Select>
-                <SelectTrigger className="w-[180px]  input">
-                  <SelectValue placeholder="Voice" />
-                </SelectTrigger>
-                <SelectContent className="bg-white text-black">
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Male</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}>
+                  <SelectTrigger className="w-[180px]  input">
+                    <SelectValue placeholder="Voice" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white text-black">
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                  </SelectContent>
+                </Select>
 
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-{/* ----------------------------------------- */}
+        {/* ----------------------------------------- */}
         <FormField
           control={form.control}
           name="style"
           render={({ field }) => (
             <FormItem>
               <FormLabel> Style</FormLabel>
+<FormControl>
 
               <Select
                 onValueChange={field.onChange}
                 value={field.value}
                 defaultValue={field.value}
-              >
+                >
                 <SelectTrigger className="w-[180px]  input capitalize">
                   <SelectValue placeholder="Select your Style" />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-black">
-                 
-                    <SelectItem value="formal">
-                      Formal
-                    </SelectItem> 
-                    <SelectItem value="causal">
-                      Causal
-                    </SelectItem>
-                
+
+                  <SelectItem value="formal">
+                    Formal
+                  </SelectItem>
+                  <SelectItem value="causal">
+                    Causal
+                  </SelectItem>
+
                 </SelectContent>
               </Select>
 
+                </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        
+
         <FormField
           control={form.control}
           name="duration"

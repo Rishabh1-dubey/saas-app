@@ -17,8 +17,6 @@ const CTA = () => {
         <Link href="/companions/new">
           <p className=''>Build a New Companion</p></Link>
 
-
-
       </Button>
     </section>
   )
