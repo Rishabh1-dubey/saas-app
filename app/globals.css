@@ -245,7 +245,7 @@ body {
   }
 
   .rounded-border {
-    @apply rounded-4xl border border-black;
+    @apply rounded-3xl border border-black;
   }
 
   .cta-section {
