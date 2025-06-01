@@ -1,12 +1,12 @@
-'use client';
-
+'use client'
 import { cn, getSubjectColor } from "@/lib/utils";
-import {configureAssistant} from "@/lib/utils";
+import { configureAssistant } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import soundwaves from '@/constants/soundwaves.json'
+
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -15,7 +15,17 @@ enum CallStatus {
     FINISHED = 'FINISHED',
 }
 
-const CompanionComponent = ({  subject, topic, name, userName, style, voice }: CompanionComponentProps) => {
+interface CompanionComponentProps {
+    companionId: string;
+    subject: string;
+    topic: string;
+    name?: string; // ✅ optional
+    userName?: string; // ✅ optional
+    style: string;
+    voice: string;
+}
+
+const CompanionComponent = ({ companionId, subject, topic, name="Assistant", userName="User", style, voice }: CompanionComponentProps) => {
     const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
@@ -81,11 +91,11 @@ const CompanionComponent = ({  subject, topic, name, userName, style, voice }: C
 
         const assistantOverrides = {
             variableValues: { subject, topic, style },
-            clientMessages: ["transcript"],
-            serverMessages: [],
+            // clientMessages: ["transcript"],
+            // serverMessages: [],
         }
 
-        // @ts-expect-error
+        
         vapi.start(configureAssistant(voice, style), assistantOverrides)
     }
 
@@ -105,7 +115,7 @@ const CompanionComponent = ({  subject, topic, name, userName, style, voice }: C
                                     'absolute transition-opacity duration-1000', callStatus === CallStatus.FINISHED || callStatus === CallStatus.INACTIVE ? 'opacity-1001' : 'opacity-0', callStatus === CallStatus.CONNECTING && 'opacity-100 animate-pulse'
                                 )
                             }>
-                            <Image src={`/icons/${subject}.svg`} alt={subject} width={150} height={150} className="max-sm:w-fit" />
+                            <Image src={`/icons/coding.svg`} alt="coding" width={150} height={150} className="max-sm:w-fit opacity-80" />
                         </div>
 
                         <div className={cn('absolute transition-opacity duration-1000', callStatus === CallStatus.ACTIVE ? 'opacity-100' : 'opacity-0')}>
@@ -122,7 +132,7 @@ const CompanionComponent = ({  subject, topic, name, userName, style, voice }: C
 
                 <div className="user-section">
                     <div className="user-avatar">
-                        <Image src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt={userName} width={130} height={130} className="rounded-lg" />
+                        <Image src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Rishabh" width={130} height={130} className="rounded-lg" />
                         <p className="font-bold text-2xl">
                             {userName}
                         </p>
@@ -133,7 +143,7 @@ const CompanionComponent = ({  subject, topic, name, userName, style, voice }: C
                             {isMuted ? 'Turn on microphone' : 'Turn off microphone'}
                         </p>
                     </button>
-                    <button className={cn('rounded-lg py-2 cursor-pointer transition-colors w-full text-white bg-black ', callStatus === CallStatus.ACTIVE ? 'bg-red-700' : '', callStatus === CallStatus.CONNECTING && 'animate-pulse')} onClick={callStatus === CallStatus.ACTIVE ? handleDisconnect : handleCall}>
+                    <button className={cn('rounded-lg py-2 cursor-pointer transition-colors w-full text-white bg-black ', callStatus === CallStatus.ACTIVE ? ' bg-red-700' : 'bg-pink-600', callStatus === CallStatus.CONNECTING && 'animate-pulse')} onClick={callStatus === CallStatus.ACTIVE ? handleDisconnect : handleCall}>
                         {callStatus === CallStatus.ACTIVE
                             ? "End Session"
                             : callStatus === CallStatus.CONNECTING
@@ -145,14 +155,14 @@ const CompanionComponent = ({  subject, topic, name, userName, style, voice }: C
             </section>
 
             <section className="transcript">
+                gggh
                 <div className="transcript-message no-scrollbar">
                     {messages.map((message, index) => {
                         if (message.role === 'assistant') {
                             return (
                                 <p key={index} className="max-sm:text-sm">
                                     {
-                                        name
-                                            .split(' ')[0]
+                                        name?.split(' ')[0]
                                             .replace('/[.,]/g, ', '')
                                     }: {message.content}
                                 </p>
