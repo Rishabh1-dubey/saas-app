@@ -3,8 +3,7 @@ import SeachInput from '@/components/SeachInput';
 import SubjectFilters from '@/components/SubjectFilters';
 import { getAllCompanions } from '@/lib/action/companion.actions';
 import { getSubjectColor } from '@/lib/utils';
-import { getSupportedBrowsers } from 'next/dist/build/utils';
-import React from 'react'
+
 
 const companions = async ({ searchParams }: SearchParams) => {
 

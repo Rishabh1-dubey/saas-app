@@ -1,12 +1,11 @@
+
 import { getCompanion } from '@/lib/action/companion.actions';
 import { getSubjectColor } from '@/lib/utils';
-import { auth, currentUser } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { currentUser } from '@clerk/nextjs/server';
+import CompanionComponent from '@/components/CompanionComponent';
 
-import React from 'react'
-import companions from '../page';
-import CompanionComponent from "@/components/CompanionComponent";
 
 interface CompanionSessionPageprops {
   params: Promise<{ id: string }>;
@@ -15,17 +14,15 @@ interface CompanionSessionPageprops {
 const CompanionSession = async ({ params }: CompanionSessionPageprops) => {
 
   const { id } = await params;
-  const {name,topic,subject,duration} = await getCompanion(id);
-  const user = await auth()
-  // sometime use auth instead of currentUser ()
- 
-console.log("user",user)
+  const companion = await getCompanion(id)
+  const { name, topic, subject, duration } = await getCompanion(id);
+
+  const user = await currentUser()
+  console.log("user",user)
 
 
   if (!user) redirect('/sign-in');
-  if (!companions) redirect('/companions')
-
-
+  if (!companion) redirect('/companions')
 
 
   return (
@@ -40,20 +37,22 @@ console.log("user",user)
           <div className='flex flex-col gap-2'>
             <div className='flex items-center gap-2'>
               <p className='font-bold text-2xl'>{name}</p>
-             <div className='subject-badge max-sm:hidden'>
-             {subject}
-            </div>
+              <div className='subject-badge max-sm:hidden'>
+                {subject}
+              </div>
             </div>
             <p className='text-lg'>{topic}</p>
           </div>
         </div>
-<p className='text-xl max-md:hidden items-start'>{duration}mintues</p>
+        <p className='text-xl max-md:hidden items-start'>{duration}mintues</p>
 
       </article>
-       <CompanionComponent  {...companions}
+      <CompanionComponent
+                {...companion}
                 companionId={id}
-                userName={"User"}
-                />
+                userName={user.firstName!}
+                userImage={user.imageUrl!}
+            />
     </main>
   )
 }
