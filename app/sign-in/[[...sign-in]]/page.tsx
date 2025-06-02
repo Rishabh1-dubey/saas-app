@@ -1,7 +1,12 @@
-import { SignIn } from '@clerk/nextjs'
+"use client"
+import { SignIn, useUser } from '@clerk/nextjs'
 
 export default function Page() {
-  return <main className='flex items-center justify-center'>
+
+const user = useUser()
+console.log("users check", user)
+
+return <main className='flex items-center justify-center'>
     <SignIn />
   </main>
 }
