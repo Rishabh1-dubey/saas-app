@@ -15,17 +15,18 @@ enum CallStatus {
     FINISHED = 'FINISHED',
 }
 
-interface CompanionComponentProps {
-    companionId: string;
-    subject: string;
-    topic: string;
-    name?: string; // ✅ optional
-    userName?: string; // ✅ optional
-    style: string;
-    voice: string;
-}
+// interface CompanionComponentProps {
+//     companionId: string;
+//     subject: string;
+//     topic: string;
+//     name: string; // ✅ optional
+//     userName: string; // ✅ optional
+//     userImage: string; // ✅ optional
+//     style: string;
+//     voice: string;
+// }
 
-const CompanionComponent = ({ companionId, subject, topic, name="Assistant", userName="User", style, voice }: CompanionComponentProps) => {
+const CompanionComponent = ({ companionId, subject, topic, name, userName, userImage, style, voice }: CompanionComponentProps) => {
     const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
@@ -91,11 +92,11 @@ const CompanionComponent = ({ companionId, subject, topic, name="Assistant", use
 
         const assistantOverrides = {
             variableValues: { subject, topic, style },
-            // clientMessages: ["transcript"],
-            // serverMessages: [],
+            clientMessages: ["transcript"],
+            serverMessages: [],
         }
 
-        
+        //@ts-expect-error
         vapi.start(configureAssistant(voice, style), assistantOverrides)
     }
 
@@ -104,18 +105,23 @@ const CompanionComponent = ({ companionId, subject, topic, name="Assistant", use
         vapi.stop()
     }
 
+console.log("Just checking my Subject", subject)
+
+
     return (
         <section className="flex flex-col h-[70vh]">
             <section className="flex gap-8 max-sm:flex-col">
                 <div className="companion-section">
                     <div className="companion-avatar" style={{ backgroundColor: getSubjectColor(subject) }}>
+
+
                         <div
                             className={
                                 cn(
                                     'absolute transition-opacity duration-1000', callStatus === CallStatus.FINISHED || callStatus === CallStatus.INACTIVE ? 'opacity-1001' : 'opacity-0', callStatus === CallStatus.CONNECTING && 'opacity-100 animate-pulse'
                                 )
                             }>
-                            <Image src={`/icons/coding.svg`} alt="coding" width={150} height={150} className="max-sm:w-fit opacity-80" />
+                            <Image src={`/icons/${subject}.svg`} alt={subject} width={150} height={150} className="max-sm:w-fit opacity-80" />
                         </div>
 
                         <div className={cn('absolute transition-opacity duration-1000', callStatus === CallStatus.ACTIVE ? 'opacity-100' : 'opacity-0')}>
@@ -132,7 +138,7 @@ const CompanionComponent = ({ companionId, subject, topic, name="Assistant", use
 
                 <div className="user-section">
                     <div className="user-avatar">
-                        <Image src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="Rishabh" width={130} height={130} className="rounded-lg" />
+                        <Image src={userImage} alt={userName} width={130} height={130} className="rounded-lg" />
                         <p className="font-bold text-2xl">
                             {userName}
                         </p>
@@ -155,7 +161,7 @@ const CompanionComponent = ({ companionId, subject, topic, name="Assistant", use
             </section>
 
             <section className="transcript">
-                gggh
+                
                 <div className="transcript-message no-scrollbar">
                     {messages.map((message, index) => {
                         if (message.role === 'assistant') {
