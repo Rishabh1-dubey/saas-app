@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import soundwaves from '@/constants/soundwaves.json'
+import { addToSessionHistory } from "@/lib/action/companion.actions";
 
 
 enum CallStatus {
@@ -49,6 +50,7 @@ const CompanionComponent = ({ companionId, subject, topic, name, userName, userI
 
         const onCallEnd = () => {
             setCallStatus(CallStatus.FINISHED);
+            addToSessionHistory(companionId)
 
         }
 
@@ -160,7 +162,7 @@ console.log("Just checking my Subject", subject)
                 </div>
             </section>
 
-            <section className="transcript">
+            <section className="transcript ">
                 
                 <div className="transcript-message no-scrollbar">
                     {messages.map((message, index) => {
