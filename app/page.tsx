@@ -16,7 +16,7 @@ const Page = async () => {
 
       <section className="home-section">
         {
-          companions.map((companion:any) => (
+          companions.map((companion:Companion) => (
 
             <CompanionCard key={companion.id} {...companion} color={getSubjectColor(companion.subject)} />
 
