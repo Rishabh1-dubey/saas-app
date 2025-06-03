@@ -20,21 +20,21 @@ export const createCompanion = async (formData: CreateCompanion) => {
 };
 
 // get all companion
-export const getAllCompanions: any = async ({
+export const getAllCompanions = async ({
   limit = 10,
   page = 1,
-  subjects,
+  subject,
   topic,
-}: typeof getAllCompanions) => {
+}: GetAllCompanions) => {
   const supabase = createSupabaseClient();
   let query = supabase.from("companions").select();
 
-  if (subjects && topic) {
+  if (subject && topic) {
     query = query
-      .ilike("subject", `%${subjects}%`)
+      .ilike("subject", `%${subject}%`)
       .or(`topic.ilike.%${topic}%,name.ilike.%${topic}%`);
-  } else if (subjects) {
-    query = query.ilike("subject", `%${subjects}`);
+  } else if (subject) {
+    query = query.ilike("subject", `%${subject}`);
   } else if (topic) {
     query = query.or(`topic.ilike.%${topic}%,name.ilike.%${topic}%`);
   }
