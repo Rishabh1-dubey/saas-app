@@ -7,3 +7,4 @@ const nextConfig: NextConfig = {
     domains: ['img.clerk.com','upload.wikimedia.org'],
   },
 };
+export default nextConfig;
